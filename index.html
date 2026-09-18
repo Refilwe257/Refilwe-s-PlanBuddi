@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="PlanBuddi is a calm, focused task manager for planning your day.">
+	<title>PlanBuddi AI | Your smart partner in productivity</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div class="app-shell">
+		<header class="site-header">
+			<a class="brand" href="#top" aria-label="PlanBuddi AI home"><span>Plan<span class="brand-accent">Buddi</span> <span class="brand-ai">AI</span></span></a>
+			<div class="header-date" aria-label="Today's date"><span class="header-date-label">Today</span><span id="headerDate"></span></div>
+		</header>
+		<main id="top">
+			<section class="welcome-row" aria-labelledby="welcomeHeading">
+				<div><p class="eyebrow">Your personal workspace</p><h1 id="welcomeHeading">Plan your day with <em>clarity.</em></h1><p class="welcome-copy">Your smart partner in productivity. Organise work, priorities, and time in one calm space.</p></div>
+				<button class="button button-primary" type="button" data-open-modal><span class="button-plus" aria-hidden="true">+</span> Add task</button>
+			</section>
+			<section class="stats-grid" aria-label="Task summary">
+				<article class="stat-card stat-card-featured"><div class="stat-icon" aria-hidden="true">◎</div><div><p>Total tasks</p><strong id="totalTasks">0</strong></div><span class="stat-trend">All time</span></article>
+				<article class="stat-card"><div class="stat-icon stat-icon-complete" aria-hidden="true">✓</div><div><p>Completed</p><strong id="completedTasks">0</strong></div><span class="stat-trend positive" id="completionRate">0% done</span></article>
+				<article class="stat-card"><div class="stat-icon stat-icon-pending" aria-hidden="true">◷</div><div><p>Pending</p><strong id="pendingTasks">0</strong></div><span class="stat-trend">To do</span></article>
+			</section>
+			<section class="planner-panel" aria-labelledby="plannerHeading">
+				<div class="section-heading"><div><p class="eyebrow">Plan with purpose</p><h2 id="plannerHeading">Planning setup</h2></div><span class="setup-status" id="setupStatus">Personal plan</span></div>
+				<div class="planner-controls">
+					<fieldset class="choice-group"><legend>Planning for</legend><label class="choice-card active"><input type="radio" name="planningMode" value="self" checked><span><strong>My tasks</strong><small>Plan your own workload</small></span></label><label class="choice-card"><input type="radio" name="planningMode" value="team"><span><strong>Team member</strong><small>Create a schedule for someone else</small></span></label></fieldset>
+					<div class="planning-fields"><div class="form-field" id="memberField" hidden><label for="teamMember">Team member</label><input id="teamMember" type="text" placeholder="e.g. Thandi Mokoena"></div><div class="form-field"><label for="planningPeriod">Planning period</label><select id="planningPeriod"><option value="daily">Daily</option><option value="weekly">Weekly</option><option value="monthly">Monthly</option></select></div><div class="form-field"><label for="workStart">Available hours</label><div class="time-range"><input id="workStart" type="time" value="08:00" aria-label="Working hours start"><span>to</span><input id="workEnd" type="time" value="17:00" aria-label="Working hours end"></div></div><button class="button button-primary generate-button" id="generateSchedule" type="button">Generate schedule</button></div>
+				</div>
+			</section>
+			<section class="tasks-section" aria-labelledby="tasksHeading">
+				<div class="section-heading"><div><p class="eyebrow">Stay on track</p><h2 id="tasksHeading">My tasks <span id="taskCount">(0)</span></h2></div><div class="task-tools"><label class="filter-label" for="taskFilter">Show</label><select id="taskFilter" aria-label="Filter tasks"><option value="all">All tasks</option><option value="pending">Pending</option><option value="completed">Completed</option></select></div></div>
+				<div id="taskList" class="task-list" aria-live="polite"></div>
+			</section>
+			<section class="empty-state" id="emptyState" hidden><div class="empty-illustration" aria-hidden="true">✦</div><h3>Your list is a blank page.</h3><p>Add a task to give your day some shape.</p><button class="button button-secondary" type="button" data-open-modal>Add your first task</button></section>
+			<section class="schedule-section" id="scheduleCapture" aria-labelledby="scheduleHeading"><div class="section-heading"><div><p class="eyebrow">Your organised day</p><h2 id="scheduleHeading">Generated calendar</h2><p class="section-note" id="scheduleSummary">Generate a schedule to see your tasks arranged by priority, deadline, and available time.</p><p class="schedule-stamp" id="scheduleGeneratedAt"></p></div><div class="schedule-actions"><button class="button button-ghost" id="shareSchedule" type="button">Share</button><button class="button button-secondary" id="downloadSchedule" type="button">Download Schedule</button></div></div><div class="calendar-wrap"><table class="calendar-table"><thead><tr><th>Day</th><th>Date</th><th>Time</th><th>Task</th><th>Status</th><th>Priority</th><th>Deadline</th></tr></thead><tbody id="calendarBody"><tr><td colspan="7" class="empty">Your generated calendar will appear here.</td></tr></tbody></table></div><div id="unscheduledTasks" class="unscheduled" hidden></div></section>
+			<section class="assistant-section" aria-labelledby="assistantHeading"><div><p class="eyebrow">Productivity companion</p><h2 id="assistantHeading">PlanBuddi AI assistant <span class="simulated-label">Simulated</span></h2><p class="section-note">Ask for a planning suggestion or a schedule refresh. This local assistant uses your current tasks; it is not connected to a live AI service.</p></div><div class="chat-log" id="chatLog" aria-live="polite"><div class="chat-bubble">I can help prioritise your current plan. Try asking which task to complete first, or ask me to regenerate your schedule.</div></div><form class="chat-form" id="chatForm"><label class="sr-only" for="chatInput">Ask PlanBuddi AI</label><input id="chatInput" type="text" placeholder="e.g. Which task should I complete first?" autocomplete="off"><button class="button button-primary" type="submit">Ask</button></form></section>
+			<aside class="ai-disclaimer"><strong>Responsible AI reminder</strong><span>Review every AI-assisted schedule before acting on it. Do not enter confidential, private, or sensitive workplace information.</span></aside>
+		</main>
+		<footer class="site-footer"><span>PlanBuddi AI</span><span class="footer-dot" aria-hidden="true">•</span><span>Plan gently. Do brilliantly.</span></footer>
+	</div>
+	<div class="modal-backdrop" id="taskModal" hidden>
+		<section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+			<div class="modal-header"><div><p class="eyebrow">Plan a responsibility</p><h2 id="modalTitle">Add a task</h2></div><button class="icon-button" type="button" data-close-modal aria-label="Close task form">×</button></div>
+			<form id="taskForm">
+				<div class="form-field form-field-wide"><label for="taskName">Task name <span aria-hidden="true">*</span></label><input id="taskName" name="taskName" type="text" placeholder="e.g. Prepare project presentation" required maxlength="80"></div>
+				<div class="form-field form-field-wide"><label for="taskDescription">Description <span class="optional">Optional</span></label><textarea id="taskDescription" name="taskDescription" rows="3" placeholder="Add a little context for your future self..." maxlength="240"></textarea></div>
+				<div class="form-grid"><div class="form-field"><label for="taskDate">Deadline <span aria-hidden="true">*</span></label><input id="taskDate" name="taskDate" type="date" required></div><div class="form-field"><label for="taskDuration">Estimated duration <span aria-hidden="true">*</span></label><div class="input-with-suffix"><input id="taskDuration" name="taskDuration" type="number" min="15" step="15" placeholder="60" required><span>minutes</span></div></div></div>
+				<div class="form-field form-field-wide"><label for="taskPriority">Priority</label><select id="taskPriority" name="taskPriority"><option value="low">Low priority</option><option value="medium" selected>Medium priority</option><option value="high">High priority</option></select></div>
+				<div class="form-field form-field-wide"><label for="taskAssigned">Assigned person <span class="optional">Optional</span></label><input id="taskAssigned" name="taskAssigned" type="text" placeholder="You or a team member"></div>
+				<div class="form-field form-field-wide"><label for="taskNotes">Additional notes <span class="optional">Optional</span></label><textarea id="taskNotes" name="taskNotes" rows="2" placeholder="Dependencies, meeting links, or helpful details..."></textarea></div>
+				<div class="form-actions"><button class="button button-ghost" type="button" data-close-modal>Cancel</button><button class="button button-primary" type="submit">Save task</button></div>
+			</form>
+		</section>
+	</div>
+	<div class="toast" id="toast" role="status" aria-live="polite"></div>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	<script src="script.js"></script>
+</body>
+</html>
